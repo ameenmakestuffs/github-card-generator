@@ -17,6 +17,7 @@ import { toPng, toBlob } from 'html-to-image';
 import { ProfileCard } from './components/ProfileCard';
 import { fetchGithubProfile } from './utils/github';
 import { INSTRUMENT_SERIF_CSS } from './utils/fonts';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   const [username, setUsername] = useState('');
@@ -432,6 +433,9 @@ export default function App() {
           @theKidwithin
         </a>
       </footer>
+
+      {/* Vercel Web Analytics */}
+      <Analytics />
 
     </div>
   );
