@@ -19,8 +19,8 @@ import { fetchGithubProfile } from './utils/github';
 import { INSTRUMENT_SERIF_CSS } from './utils/fonts';
 
 export default function App() {
-  const [username, setUsername] = useState('ameenmakestuffs');
-  const [inputVal, setInputVal] = useState('ameenmakestuffs');
+  const [username, setUsername] = useState('');
+  const [inputVal, setInputVal] = useState('');
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -59,9 +59,14 @@ export default function App() {
     }
   };
 
-  // Initial load
+  // Check URL parameter on load
   useEffect(() => {
-    loadProfile('ameenmakestuffs');
+    const params = new URLSearchParams(window.location.search);
+    const initialUser = params.get('user') || params.get('u');
+    if (initialUser) {
+      setInputVal(initialUser);
+      loadProfile(initialUser);
+    }
   }, [token]);
 
   const handleSubmit = (e) => {
@@ -310,6 +315,18 @@ export default function App() {
             <div className="py-24 text-center">
               <RefreshCw className="w-6 h-6 animate-spin text-neutral-400 mx-auto mb-2" />
               <p className="text-sm text-neutral-500 font-semibold">Fetching profile and contribution activity...</p>
+            </div>
+          ) : !data ? (
+            <div className="w-full max-w-[1140px] min-h-[460px] sm:min-h-[520px] rounded-[24px] border border-black/10 bg-white/70 shadow-xs flex flex-col items-center justify-center p-8 text-center select-none">
+              <div className="w-14 h-14 rounded-2xl bg-neutral-100 border border-black/5 flex items-center justify-center mb-4">
+                <Search className="w-6 h-6 text-neutral-400" />
+              </div>
+              <h3 className="text-xl font-bold tracking-tight text-neutral-900">
+                Enter your GitHub username
+              </h3>
+              <p className="text-xs sm:text-sm text-neutral-500 mt-1.5 max-w-[340px] leading-relaxed">
+                Type any username on the left and hit <strong>Generate</strong> to create your profile card.
+              </p>
             </div>
           ) : (
             <div className="w-full max-w-[1140px] flex flex-col items-center lg:items-end">
